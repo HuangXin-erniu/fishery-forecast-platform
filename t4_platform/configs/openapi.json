@@ -1,0 +1,562 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "课题四地图工作台 Mock 接口",
+    "version": "0.1.0",
+    "description": "P04 提议契约；未代表 P01/P02/P03 已提供接口。经度在前，UTC 时间；网格原点为西南角，逐行自南向北。null 为缺测，0 为有效零。"
+  },
+  "paths": {
+    "/api/v1/capabilities": {
+      "get": {
+        "summary": "查询模拟能力与上游接入状态",
+        "responses": {
+          "200": {
+            "description": "成功；业务可用状态见响应字段",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Capabilities"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "参数不受支持"
+          },
+          "503": {
+            "description": "服务暂不可用"
+          }
+        }
+      }
+    },
+    "/api/v1/map": {
+      "get": {
+        "summary": "查询单日单图层网格",
+        "responses": {
+          "200": {
+            "description": "成功；业务可用状态见响应字段",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MapResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "参数不受支持"
+          },
+          "503": {
+            "description": "服务暂不可用"
+          }
+        },
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "layer_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/cells/{cell_id}": {
+      "get": {
+        "summary": "查询网格详情",
+        "responses": {
+          "200": {
+            "description": "成功；业务可用状态见响应字段",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CellResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "参数不受支持"
+          },
+          "503": {
+            "description": "服务暂不可用"
+          }
+        },
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "layer_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cell_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^r[0-9]+c[0-9]+$"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/knowledge/query": {
+      "post": {
+        "summary": "带地图上下文的模拟知识问答",
+        "responses": {
+          "200": {
+            "description": "成功；业务可用状态见响应字段",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KnowledgeResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "参数不受支持"
+          },
+          "503": {
+            "description": "服务暂不可用"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KnowledgeRequest"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Layer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "min": {
+            "type": "number"
+          },
+          "max": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "unit",
+          "source",
+          "version",
+          "min",
+          "max"
+        ],
+        "additionalProperties": false
+      },
+      "Grid": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "step": {
+            "type": "number"
+          },
+          "rows": {
+            "type": "integer"
+          },
+          "cols": {
+            "type": "integer"
+          },
+          "order": {
+            "const": "south-to-north-row-major",
+            "type": "string"
+          },
+          "crs": {
+            "const": "EPSG:4326",
+            "type": "string"
+          }
+        },
+        "required": [
+          "origin",
+          "step",
+          "rows",
+          "cols",
+          "order",
+          "crs"
+        ],
+        "additionalProperties": false
+      },
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "const": "mock",
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "issued_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "valid_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "upstream_status": {
+            "const": "not_connected",
+            "type": "string"
+          }
+        },
+        "required": [
+          "mode",
+          "source",
+          "version",
+          "issued_at",
+          "valid_at",
+          "upstream_status"
+        ],
+        "additionalProperties": false
+      },
+      "Capabilities": {
+        "type": "object",
+        "properties": {
+          "dates": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          "layers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Layer"
+            }
+          },
+          "bbox": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "upstreams": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "status"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "mode": {
+            "const": "mock",
+            "type": "string"
+          }
+        },
+        "required": [
+          "dates",
+          "layers",
+          "bbox",
+          "upstreams",
+          "mode"
+        ],
+        "additionalProperties": false
+      },
+      "MapResult": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "empty",
+              "not_ready",
+              "error"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "layer": {
+            "$ref": "#/components/schemas/Layer"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          },
+          "grid": {
+            "$ref": "#/components/schemas/Grid"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          },
+          "centers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "lon": {
+                  "type": "number"
+                },
+                "lat": {
+                  "type": "number"
+                },
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "lon",
+                "lat",
+                "label"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "season": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "message",
+          "date",
+          "layer",
+          "meta",
+          "grid",
+          "values",
+          "centers",
+          "season"
+        ],
+        "additionalProperties": false
+      },
+      "CellResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "lon": {
+            "type": "number"
+          },
+          "lat": {
+            "type": "number"
+          },
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "unit": {
+            "type": "string"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          },
+          "behaviours": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "name",
+                "count"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "id",
+          "lon",
+          "lat",
+          "value",
+          "unit",
+          "meta",
+          "behaviours"
+        ],
+        "additionalProperties": false
+      },
+      "KnowledgeRequest": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string"
+          },
+          "context": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string"
+              },
+              "layer_id": {
+                "type": "string"
+              },
+              "cell_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "date",
+              "layer_id",
+              "cell_id"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "question",
+          "context"
+        ],
+        "additionalProperties": false
+      },
+      "KnowledgeResult": {
+        "type": "object",
+        "properties": {
+          "answer": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "example",
+              "not_ready"
+            ],
+            "type": "string"
+          },
+          "mode": {
+            "const": "mock",
+            "type": "string"
+          },
+          "context": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string"
+              },
+              "layer_id": {
+                "type": "string"
+              },
+              "cell_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "date",
+              "layer_id",
+              "cell_id"
+            ],
+            "additionalProperties": false
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "kind": {
+                  "const": "example",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title",
+                "kind"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "answer",
+          "status",
+          "mode",
+          "context",
+          "sources"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "source_commit": "aee075f434fa63d99535c6ce14d734dbb7d3f76e",
+  "source_subtree": "t4_platform",
+  "publication": "P04 Mock frontend source snapshot; independent history",
+  "files_sha256": {
+    "t4_platform/.gitignore": "df3d49374dcfefb90dab9b99b9bfc3240be8226c6932da4001727a67bf5965f4",
+    "t4_platform/configs/basemap-source.json": "47e80403cb9d8772f5ac4a132cffbff02c02e9dedbb0c46419d0237e197dd25d",
+    "t4_platform/configs/openapi.json": "a80cd390da3e0e4569b4f561a2931e0e7770b4b5b6146c34836f043c8da936af",
+    "t4_platform/index.html": "ff87e39bcc6e60db5dfbe50241f116f33e5ba8852524ce37177116d8ee41f56c",
+    "t4_platform/package-lock.json": "fe89b49fdbb117263c5bd15f6abb3fe0e4a7bade780326be99f1cb5e7ff49ee3",
+    "t4_platform/package.json": "77fde630658e3e9bce429151b5112d607e2b8be9f48bf6271eb8bc8ae4e41edc",
+    "t4_platform/playwright.config.ts": "76ebd80a810f0a5d8644b8325490d4c1c7bf63fc47140ccda12afce6d14b98fc",
+    "t4_platform/public/land.geojson": "e874b27a51d146452be360cafb3cc50c86001074a67d534113e6534682f9826b",
+    "t4_platform/public/mockServiceWorker.js": "95b1dc477ddc44e8e9e42adbb5004236f16fa10b4586362630668df1341de153",
+    "t4_platform/src/App.tsx": "96a12f97ad714a3182abc748aa3117281d76e36f6c026cf999db9cc6abee4004",
+    "t4_platform/src/MapView.tsx": "5e370bf68d8601378bcf292ed5a207aba6df07b5db372e14930ccd1e984ae799",
+    "t4_platform/src/api-types.ts": "cda800f9a6123ff49303737594eb9fda184f2f57cbd1c6b2f256c568eb374efa",
+    "t4_platform/src/client.ts": "1f181574b32726f577e9bf7ce12f3b3f4d07d314ed108883489bb765dc93f2d2",
+    "t4_platform/src/main.tsx": "7bbf41cc639cea6bdabc35dad56f46a9b37fb8ef0c9850e804d937c2047db40d",
+    "t4_platform/src/mocks.ts": "50cf90825bd80c92999e8e1bb77315555a7f818bd3d529808080a84ccfbc5f8f",
+    "t4_platform/src/model.ts": "2c3a2c35fa98268d8589ed47e4757e27bdf26d416255da35a616f74978dec4cf",
+    "t4_platform/src/style.css": "fcb0f95e77fec2f2e239f67d6c665f579450e7d0e83d58a1b636895bc063ba0d",
+    "t4_platform/tests/unit.test.ts": "0bc6c841408abb72ff4ccc8d6aeff40fc071f18884c1c2a2d92af3b252784dbf",
+    "t4_platform/tests/workbench.e2e.ts": "a8818389e7f320c301da6906dcbc2c68e8edb9224dece2480dba34daf7d4b1c5",
+    "t4_platform/tsconfig.json": "73f5b6eb8e080f178c3a0b6ec1e970fa93e2883567688466232d1f340960d24f",
+    "t4_platform/vite.config.ts": "29aee4c3ad2978cc649864f2267f2bc86d818298e4f99fe5f5d5178ecbb962f8"
+  }
+}
