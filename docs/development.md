@@ -27,7 +27,6 @@ Open <http://127.0.0.1:5173>. The dev server uses a strict port; if the port is 
 | `npm run build` | Type-check, then build `dist/`. |
 | `npm test` | Vitest unit and contract tests. |
 | `npm run test:e2e` | Playwright browser tests. |
-| `npm run screenshot` | Build, preview and regenerate the README screenshot. |
 
 ## Tests
 
@@ -73,16 +72,6 @@ Node is selected from `.nvmrc`. No secrets are required.
   ```sh
   npx msw init public/ --save
   ```
-
-## README screenshot
-
-The README uses `docs/images/workbench-overview.png`. Regenerate it with:
-
-```sh
-npm run screenshot
-```
-
-The script builds the app, starts `vite preview` on `127.0.0.1:4173`, waits for the default workbench state (first date, probability layer, no selection or answer), captures a 1920×1080 full-page image, writes the file, and stops the server. Chromium is required (`npx playwright install chromium`). The script lives in `scripts/screenshot.mjs`.
 
 ## Troubleshooting
 

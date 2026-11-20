@@ -35,8 +35,7 @@
     "typecheck": "tsc --noEmit",
     "build": "npm run typecheck && vite build",
     "test": "vitest run tests/unit.test.ts",
-    "test:e2e": "playwright test",
-    "screenshot": "node scripts/screenshot.mjs"
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "react": "19.3.1",
