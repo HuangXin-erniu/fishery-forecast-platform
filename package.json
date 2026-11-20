@@ -1,7 +1,32 @@
 {
-  "name": "merman-platform",
+  "name": "fishery-forecast-platform",
   "version": "0.1.0",
   "private": true,
+  "description": "Offshore Fishery Forecast Platform — offline map, OpenAPI contract, and mock front-end for integrated fishery forecasting.",
+  "license": "Apache-2.0",
+  "author": "HuangXin-erniu",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HuangXin-erniu/fishery-forecast-platform.git"
+  },
+  "homepage": "https://github.com/HuangXin-erniu/fishery-forecast-platform#readme",
+  "bugs": {
+    "url": "https://github.com/HuangXin-erniu/fishery-forecast-platform/issues"
+  },
+  "keywords": [
+    "fishery",
+    "forecast",
+    "offshore",
+    "react",
+    "openlayers",
+    "openapi",
+    "mock",
+    "research-platform"
+  ],
+  "engines": {
+    "node": ">=24.15.0"
+  },
+  "packageManager": "npm@11.12.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
