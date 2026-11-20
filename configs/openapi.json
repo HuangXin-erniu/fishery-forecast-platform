@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "课题四地图工作台 Mock 接口",
+    "title": "Offshore Fishery Forecast Platform — Mock API",
     "version": "0.1.0",
     "description": "P04 提议契约；未代表 P01/P02/P03 已提供接口。经度在前，UTC 时间；网格原点为西南角，逐行自南向北。null 为缺测，0 为有效零。"
   },
