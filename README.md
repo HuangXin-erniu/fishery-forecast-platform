@@ -1,67 +1,125 @@
-# Merman Platform · 渔情研究工作台
+# Offshore Fishery Forecast Platform
 
-集成渔情预报、捕捞努力量、海表温度和知识解释的电脑端地图原型。当前交付为**接口契约与 Mock 前端**：所有业务数据均为明确标注的模拟结果，尚未连接真实上游服务。
+[English](README.md) | [简体中文](README.zh-CN.md)
 
-## 功能
+[![CI](https://github.com/HuangXin-erniu/fishery-forecast-platform/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/HuangXin-erniu/fishery-forecast-platform/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![Node](https://img.shields.io/badge/node-24.15.0-brightgreen)](.nvmrc)
 
-- 离线自然地理底图、研究区浏览、日期与图层切换、网格点选。
-- 模拟中心渔场、聚合行为摘要及渔汛说明。
-- 携带地图上下文的模拟知识解释与自由提问入口。
-- 当前图层 CSV 与来源 JSON 导出。
-- OpenAPI 3.1 中文契约及生成的 TypeScript 类型。
+A standalone front-end prototype for integrated fishery forecasting. It provides an offline map, an OpenAPI 3.1 contract, and a reproducible mock service for platform-integration research.
 
-## 仓库结构
+> **Status: mock prototype.** All business data is synthetic and clearly labelled. The P01/P02/P03 upstream services are not connected. This repository is not the authoritative production platform, and its output must not be used for real fishing, navigation, or safety decisions.
 
-本仓库是独立前端项目，所有 npm 命令在仓库根目录执行。仓库名及 npm 包名统一为 `merman-platform`。
+![Workbench](docs/images/workbench.png)
 
-```text
-merman-platform/
-├── src/                 页面、地图、HTTP 客户端和 Mock
-├── public/              离线底图与 Mock Service Worker
-├── configs/             OpenAPI 契约及底图来源
-├── tests/               契约与浏览器测试
-├── package.json
-├── package-lock.json
-├── source-manifest.json          来源提交及原始／当前文件哈希
-└── README.md
-```
+*The interface is currently in Chinese. This README is available in English and Simplified Chinese.*
 
-## 本机运行
+## Overview
 
-使用 Node.js 24（已验证 24.15.0）和 npm 11（已验证 11.12.1）：
+The workbench is a browser-only prototype. A mock service worker serves four API endpoints; the map, panels, and exports consume those endpoints exactly as a future real service would. No backend, database, API key, or external tile service is required at runtime.
+
+The prototype covers:
+
+- an offline Natural Earth 1:50m land basemap;
+- three synthetic layers: fishing-ground probability, fishing effort, and sea surface temperature;
+- date and layer switching, a fishing-centre overlay, and native-grid inspection;
+- context-aware mock knowledge explanations and free-form questions;
+- CSV and provenance JSON export;
+- an OpenAPI 3.1 contract and generated TypeScript types.
+
+The P01/P02/P03 upstreams are shown as "not connected" in the UI. Replacing the mock with real services is a separate integration task; see [docs/api.md](docs/api.md).
+
+## Quick start
+
+Use Node.js 24.15.0 and npm 11.12.1 (the repository's `.nvmrc`):
 
 ```sh
-git clone https://github.com/HuangXin-erniu/merman-platform.git
-cd merman-platform
+git clone https://github.com/HuangXin-erniu/fishery-forecast-platform.git
+cd fishery-forecast-platform
 npm ci
 npm run dev
 ```
 
-浏览器打开 http://127.0.0.1:5173 ，Ctrl+C 停止。端口占用时启动失败。首次安装依赖需要网络；页面加载后的地图与 Mock 查询不依赖外网服务、密钥、后端或数据库。
+Open <http://127.0.0.1:5173>. Press `Ctrl+C` to stop. The dev server uses a strict port: startup fails instead of silently choosing another port. The first install needs network access; after that the map and mock queries work offline.
 
-## 验证
+## Scripts
+
+| Command | Purpose |
+|---|---|
+| `npm run dev` | Start the Vite development server. |
+| `npm run generate` | Regenerate `src/api-types.ts` from `configs/openapi.json`. |
+| `npm run typecheck` | Run TypeScript without emitting files. |
+| `npm run build` | Type-check and build the production bundle. |
+| `npm test` | Run the unit and contract tests. |
+| `npm run test:e2e` | Run the Playwright browser tests (desktop 1280 and 1920 viewports). |
+
+## API and data
+
+The proposed contract is [configs/openapi.json](configs/openapi.json). The endpoints are served by the mock service worker under `/api/v1`:
+
+- `GET /capabilities`
+- `GET /map?date=<date>&layer_id=<layer>`
+- `GET /cells/{cell_id}?date=<date>&layer_id=<layer>`
+- `POST /knowledge/query`
+
+Supported mock scenarios can be selected with `?scenario=empty`, `not_ready`, `error`, or `race`. See [docs/api.md](docs/api.md) for request and response details.
+
+The fixed mock dates are 2026-06-15, 2026-06-16, and 2026-06-17 (UTC). The study window is 108–118°E, 20–24°N on a 0.1° demonstration grid. `null` means missing and `0` is a valid zero. The demonstration resolution is not the resolution of any real upstream product. See [docs/data.md](docs/data.md).
+
+## Repository layout
+
+```text
+.
+├── configs/                 OpenAPI contract and basemap source record
+├── docs/                    Architecture, API, data, development and provenance
+├── public/                  Offline land data and the mock service worker
+├── src/
+│   ├── components/          Presentational workbench panels
+│   ├── App.tsx              State, requests and panel composition
+│   └── model.ts             Mock data model and export helpers
+├── tests/                   Unit, contract and browser tests
+├── source-manifest.json     Source commit, path mapping and file hashes
+└── README.md                This document
+```
+
+The component split under `src/components/` is intentionally shallow: the panels are presentational, while `App.tsx` owns state, abort handling, and request orchestration.
+
+## Testing
 
 ```sh
-npm run generate
-npm run typecheck
 npm test
-npm run build
 npx playwright install chromium
 npm run test:e2e
 ```
 
-已验证 5 项单元／契约测试、12 项浏览器测试，覆盖 1280×800 和 1920×1080、查询与导出、断网、异常重试、请求竞态、零值及缺测显示。
+The suite contains 5 unit/contract tests and 12 browser tests (6 scenarios across two desktop viewports). The browser tests verify the offline map, layer and date switching, grid selection, exports, error retry, request races, zero-versus-missing display, and the absence of third-party requests.
 
-## 接口与数据含义
+## Data sources and licenses
 
-契约见 [configs/openapi.json](configs/openapi.json)。接口位于 `/api/v1`：`capabilities`、`map`、`cells/{cell_id}`、`knowledge/query`。全部构建均为 Mock 原型，真实接入需要单独实现。
+- Land geometry: Natural Earth 1:50m land, public domain. Source URL, terms, and SHA-256 are recorded in [configs/basemap-source.json](configs/basemap-source.json).
+- Application code: Apache License 2.0. See [LICENSE](LICENSE).
+- Third-party dependencies retain their own licenses; the exact versions are pinned in `package-lock.json`.
 
-固定演示日期为 2026-06-15、16、17；研究区为 20–24°N、108–118°E。WGS84 经度在前；0.1° 演示网格自南向北逐行排列，原点为西南角，100 列 × 40 行。时间使用 UTC，模拟起报与有效时间相同。null 表示缺测，0 表示有效零；演示分辨率不代表真实上游原生分辨率。
+The repository does not include real fishery data, models, run outputs, or P01/P02/P03 source code.
 
-知识回答与来源均标记为示例。任意问题提示真实知识服务尚未连接。开发验证可使用 `?scenario=empty`、`not_ready`、`error`、`race`；error 场景首次请求失败，重试后恢复。
+## Provenance
 
-## 底图与发布范围
+The initial front-end was published from the `t4_platform` subtree at commit `aee075f434fa63d99535c6ce14d734dbb7d3f76e`. This repository has independent history. `source-manifest.json` keeps the original commit, path mapping, and source-file hashes; the current-file hashes cover the state at this refactor.
 
-Natural Earth 1:50m 陆地数据随前端离线提供，属于 public domain。来源、使用条款和 SHA256 见 [底图登记](configs/basemap-source.json)。
+See [docs/provenance.md](docs/provenance.md) for the mapping, exclusions, and verification steps.
 
-这是课题四的独立前端仓库，初始代码由课题四 Mock 原型导出，后续可在本仓库根目录独立开发、测试和版本管理。仓库仅包含前端原型及自然地理底图。公开文件已独立放置在仓库根目录，保留原有提交历史。来源记录中的 `source_files_sha256` 保留原始课题路径与哈希，`files_sha256` 记录当前仓库路径与哈希（不含来源记录自身）。来源提交与逐文件 SHA256 见 [source-manifest.json](source-manifest.json)。真实科研数据、模型、运行产物、AgentHub 状态以及课题一、二、三代码均未发布。源项目的权威仓库及集成流程保持独立。
+## Contributing
+
+Issues and pull requests are welcome. Before submitting a change, run:
+
+```sh
+npm run typecheck
+npm test
+npm run test:e2e
+```
+
+Do not commit generated browser output, real data, credentials, or run artifacts.
+
+## License
+
+Apache License 2.0. Copyright 2026 HuangXin-erniu.
