@@ -21,11 +21,13 @@ Open <http://127.0.0.1:5173>. The dev server uses a strict port; if the port is 
 | Command | Description |
 |---|---|
 | `npm run dev` | Start Vite. |
+| `npm run preview` | Preview the production build. |
 | `npm run generate` | Regenerate `src/api-types.ts` from `configs/openapi.json`. |
 | `npm run typecheck` | `tsc --noEmit`. |
 | `npm run build` | Type-check, then build `dist/`. |
 | `npm test` | Vitest unit and contract tests. |
 | `npm run test:e2e` | Playwright browser tests. |
+| `npm run screenshot` | Build, preview and regenerate the README screenshot. |
 
 ## Tests
 
@@ -74,14 +76,13 @@ Node is selected from `.nvmrc`. No secrets are required.
 
 ## README screenshot
 
-The README uses `docs/images/workbench.png`. To regenerate it after a UI change:
+The README uses `docs/images/workbench-overview.png`. Regenerate it with:
 
 ```sh
-npm run test:e2e
-cp "test-results/workbench.e2e.ts-离线地图、查询、点选、知识与导出-desktop-1920/workbench.png" docs/images/workbench.png
+npm run screenshot
 ```
 
-The screenshot is a full-page 1920×1080 capture of the final UI. Update the source hashes in `source-manifest.json` after replacing it (see [provenance](provenance.md)).
+The script builds the app, starts `vite preview` on `127.0.0.1:4173`, waits for the default workbench state (first date, probability layer, no selection or answer), captures a 1920×1080 full-page image, writes the file, and stops the server. Chromium is required (`npx playwright install chromium`). The script lives in `scripts/screenshot.mjs`.
 
 ## Troubleshooting
 

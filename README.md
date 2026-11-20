@@ -10,7 +10,7 @@ A standalone front-end prototype for integrated fishery forecasting. It provides
 
 > **Status: mock prototype.** All business data is synthetic and clearly labelled. The P01/P02/P03 upstream services are not connected. This repository is not the authoritative production platform, and its output must not be used for real fishing, navigation, or safety decisions.
 
-![Workbench](docs/images/workbench.png)
+![Workbench](docs/images/workbench-overview.png)
 
 *The interface is currently in Chinese. This README is available in English and Simplified Chinese.*
 
@@ -47,11 +47,13 @@ Open <http://127.0.0.1:5173>. Press `Ctrl+C` to stop. The dev server uses a stri
 | Command | Purpose |
 |---|---|
 | `npm run dev` | Start the Vite development server. |
+| `npm run preview` | Preview the production build. |
 | `npm run generate` | Regenerate `src/api-types.ts` from `configs/openapi.json`. |
 | `npm run typecheck` | Run TypeScript without emitting files. |
 | `npm run build` | Type-check and build the production bundle. |
 | `npm test` | Run the unit and contract tests. |
 | `npm run test:e2e` | Run the Playwright browser tests (desktop 1280 and 1920 viewports). |
+| `npm run screenshot` | Build, start a local preview, and regenerate `docs/images/workbench-overview.png`. |
 
 ## API and data
 

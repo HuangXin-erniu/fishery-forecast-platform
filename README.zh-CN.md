@@ -10,7 +10,7 @@
 
 > **状态：Mock 原型。** 所有业务数据均为人工构造并明确标注；P01 / P02 / P03 上游服务尚未接入。本仓库不是权威生产平台，结果不得用于真实捕捞、航行或安全决策。
 
-![工作台](docs/images/workbench.png)
+![工作台](docs/images/workbench-overview.png)
 
 *界面当前为中文；README 提供英文和简体中文两个版本。*
 
@@ -47,11 +47,13 @@ npm run dev
 | 命令 | 用途 |
 |---|---|
 | `npm run dev` | 启动 Vite 开发服务器。 |
+| `npm run preview` | 预览生产构建。 |
 | `npm run generate` | 从 `configs/openapi.json` 重新生成 `src/api-types.ts`。 |
 | `npm run typecheck` | 只做 TypeScript 检查，不输出文件。 |
 | `npm run build` | 类型检查并构建生产包。 |
 | `npm test` | 运行单元与契约测试。 |
 | `npm run test:e2e` | 运行 Playwright 浏览器测试（桌面 1280 与 1920 两个视口）。 |
+| `npm run screenshot` | 构建并启动本地预览，重新生成 `docs/images/workbench-overview.png`。 |
 
 ## 接口与数据
 
